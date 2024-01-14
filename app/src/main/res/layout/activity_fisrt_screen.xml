@@ -7,6 +7,19 @@
     tools:context=".fisrtScreen">
 
     <Button
+        android:id="@+id/toTTT"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="TicTacToe"
+        app:layout_constraintBottom_toTopOf="@+id/toMS"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.68">
+
+    </Button>
+
+    <Button
         android:id="@+id/toMS"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -15,5 +28,62 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
+    <NumberPicker
+        android:id="@+id/NPHeight"
+        android:layout_width="40dp"
+        android:layout_height="120dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.714"
+        app:layout_constraintStart_toEndOf="@+id/toMS"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.499">
+
+    </NumberPicker>
+
+    <NumberPicker
+        android:id="@+id/NPWidth"
+        android:layout_width="40dp"
+        android:layout_height="120dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.234"
+        app:layout_constraintStart_toEndOf="@+id/toMS"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.499">
+
+    </NumberPicker>
+
+    <TextView
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:gravity="center"
+        android:text="W"
+        android:textSize="20sp"
+        app:layout_constraintBottom_toTopOf="@+id/NPWidth"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.797"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="1.0">
+
+    </TextView>
+
+    <TextView
+        android:id="@+id/textView"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:gravity="center"
+        android:text="H"
+        android:textSize="20sp"
+        app:layout_constraintBottom_toTopOf="@+id/NPWidth"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.924"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="1.0">
+
+    </TextView>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

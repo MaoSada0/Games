@@ -21,9 +21,9 @@ public class MineSweeper extends AppCompatActivity {
 
     Button[][] cells;
 
-    static int WIDTH = 9;
-    static int HEIGHT = 9;
-    static int numMines = 10;
+    static int WIDTH = 15;
+    static int HEIGHT = 20;
+    static int numMines = 9;
     int ct = 0;
     int numFlugBefore10 = 0;
 
@@ -31,9 +31,9 @@ public class MineSweeper extends AppCompatActivity {
     static boolean isEnd = false;
 
     static int[][] mp = GetRandomMap();
-    static boolean[][] wasClicked = new boolean[HEIGHT][WIDTH];
-    static boolean[][] wasDoubleClicked = new boolean[HEIGHT][WIDTH];
-    static boolean [][] wasFlag = new boolean[HEIGHT][WIDTH];
+    static boolean[][] wasClicked;
+    static boolean[][] wasDoubleClicked;
+    static boolean [][] wasFlag;
 
     public static String flagship = "\uD83D\uDEA9";
     public static String bombIcon = "\uD83D\uDCA3";
@@ -43,12 +43,26 @@ public class MineSweeper extends AppCompatActivity {
     @SuppressLint("SetTextI18n")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
+
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.screenmines);
+
+        Bundle extras = getIntent().getExtras();
+        if (extras != null) {
+           WIDTH = extras.getInt("width");
+           HEIGHT = extras.getInt("height");
+        }
+
+        wasClicked = new boolean[HEIGHT][WIDTH];
+        wasDoubleClicked = new boolean[HEIGHT][WIDTH];
+        wasFlag = new boolean[HEIGHT][WIDTH];
+
         fillInWasClicked(false);
         fillInWasDoubleClicked(false);
         fillInWasFlag(false);
 
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.screenmines);
+        numMines = ((WIDTH * HEIGHT) / 10) + 1;
 
         Button back = (android.widget.Button) findViewById(R.id.backFromMines);
         back.setOnClickListener(new View.OnClickListener() {
@@ -62,7 +76,7 @@ public class MineSweeper extends AppCompatActivity {
         TextView flagsCount = (TextView) findViewById(R.id.flags);
         TextView endTv = (TextView) findViewById(R.id.end);
 
-        flagsCount.setText(flagship + ": " + (10 - numFlugBefore10));
+        flagsCount.setText(flagship + ": " + (numMines - numFlugBefore10));
 
         Button reBtn = (Button) findViewById(R.id.reBtn);
         reBtn.setOnClickListener(new View.OnClickListener() {
@@ -74,7 +88,7 @@ public class MineSweeper extends AppCompatActivity {
 
                 numFlugBefore10 = 0;
 
-                flagsCount.setText(flagship + ": " + (10 - numFlugBefore10));
+                flagsCount.setText(flagship + ": " + (numMines - numFlugBefore10));
 
                 endTv.setText("");
 
@@ -121,7 +135,7 @@ public class MineSweeper extends AppCompatActivity {
                                 while (mp[finalI][finalJ] != 0){
                                     mp = GetRandomMap();
                                 }
-                                printMap(mp);
+                                //printMap(mp);
                                 isFirst = false;
                             }
 
@@ -186,7 +200,7 @@ public class MineSweeper extends AppCompatActivity {
                                 wasClicked[finalI][finalJ] = false;
                                 wasFlag[finalI][finalJ] = false;
                                 numFlugBefore10--;
-                                flagsCount.setText(flagship + ": " + (10 - numFlugBefore10));
+                                flagsCount.setText(flagship + ": " + (numMines - numFlugBefore10));
                             }
                             else {
                                 if(!wasClicked[finalI][finalJ] && numFlugBefore10 < 10){
@@ -194,7 +208,7 @@ public class MineSweeper extends AppCompatActivity {
                                     numFlugBefore10++;
                                     wasClicked[finalI][finalJ] = true;
                                     wasFlag[finalI][finalJ] = true;
-                                    flagsCount.setText(flagship + ": " + (10 - numFlugBefore10));
+                                    flagsCount.setText(flagship + ": " + (numMines - numFlugBefore10));
                                 }
                             }
                             if(isWon(cells, mp)){
@@ -222,7 +236,7 @@ public class MineSweeper extends AppCompatActivity {
                 }
             }
         }
-        Log.d("k", String.valueOf(k) + " " + String.valueOf(isAll(wasClicked)));
+        //Log.d("k", String.valueOf(k) + " " + String.valueOf(isAll(wasClicked)));
 
         if(k == numMines && isAll(wasClicked)){
             return true;
@@ -309,16 +323,16 @@ public class MineSweeper extends AppCompatActivity {
                 openNums(map, y, x + 1, cells);
             }
 
-            if(y - 1 > 0 && x - 1 > 0){
+            if(y - 1 >= 0 && x - 1 >= 0){
                 openNums(map, y - 1, x - 1, cells);
             }
-            if(y + 1 < HEIGHT && x - 1 > 0){
+            if(y + 1 < HEIGHT && x - 1 >= 0){
                 openNums(map, y + 1, x - 1, cells);
             }
             if(y + 1 < HEIGHT && x + 1 < WIDTH){
                 openNums(map, y + 1, x + 1, cells);
             }
-            if(y - 1 > 0 && x + 1 < WIDTH){
+            if(y - 1 >= 0 && x + 1 < WIDTH){
                 openNums(map, y - 1, x + 1, cells);
             }
 
@@ -392,12 +406,13 @@ public class MineSweeper extends AppCompatActivity {
     public static int[][] GetRandomMap(){
         int[][] map = new int[HEIGHT][WIDTH];
 
-        int nMs = numMines;
+        int nMs = ((WIDTH * HEIGHT) / 10) + 1;
+        numMines = nMs;
         HashSet<Integer> randNums = new HashSet<>();
 
         while(nMs > 0){
             int randomNum = 0;
-            randomNum = ThreadLocalRandom.current().nextInt(0, 80);
+            randomNum = ThreadLocalRandom.current().nextInt(0, WIDTH * HEIGHT - 1);
             if(randNums.contains(randomNum)){
                 continue;
             }
@@ -410,7 +425,7 @@ public class MineSweeper extends AppCompatActivity {
         int k = 0;
 
         for(int i = 0; i < map.length; i++){
-            for(int j = 0; j < map.length; j++){
+            for(int j = 0; j < map[i].length; j++){
                 if(randNums.contains(k)){
                     map[i][j] = -1;
                 }
@@ -422,7 +437,7 @@ public class MineSweeper extends AppCompatActivity {
         }
 
         for(int i = 0; i < map.length; i++){
-            for(int j = 0; j < map.length; j++){
+            for(int j = 0; j < map[i].length; j++){
                 if(map[i][j] != -1){
                     map[i][j] = whatNum(map, i, j);
                 }
